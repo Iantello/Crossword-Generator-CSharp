@@ -7,18 +7,35 @@ using static CrosswordGen.CrosswordGenerator;
 
 namespace CrosswordGen
 {
+
     public partial class Form1 : Form
     {
+        private List<WordItem> userDictionary = new List<WordItem>();
+
+        // Лимит слов
+        private const int MaxWords = 20;
+
         // Размер поля
         const int GridSize = 20;
         CrosswordGenerator _generator;
 
         public Form1()
         {
+            // Обязательно первая строчка!
             InitializeComponent();
+
+            // Обновляем счетчик слов при запуске (из первого твоего варианта)
+            UpdateWordCount();
+
+            // Инициализируем генератор и сетку (из второго твоего варианта)
             _generator = new CrosswordGenerator(GridSize, GridSize);
             InitializeGrid();
             gridCrossword.CellPainting += GridCrossword_CellPainting;
+        }
+
+        private void UpdateWordCount()
+        {
+            lblWordCount.Text = $"Слов: {userDictionary.Count}/{MaxWords}";
         }
 
         private void InitializeGrid()
@@ -84,22 +101,26 @@ namespace CrosswordGen
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
-            // Создаем список слов с загадками
-            var wordList = new List<WordItem>()
-    {
-        new WordItem("ПРОГРАММА", "Набор инструкций для компьютера"),
-        new WordItem("КОМПЬЮТЕР", "Электронное вычислительное устройство"),
-        new WordItem("АЛГОРИТМ", "Последовательность действий"),
-        new WordItem("СЕРВЕР", "Мощный компьютер, обслуживающий сеть"),
-        new WordItem("МЫШЬ", "Манипулятор для управления курсором"),
-        new WordItem("ЭКРАН", "Устройство вывода информации"),
-        new WordItem("КОД", "Текст программы"),
-        new WordItem("СЕТЬ", "Соединение нескольких компьютеров")
-    };
+            // 1. Проверяем, добавил ли пользователь хотя бы пару слов в словарь
+            if (userDictionary.Count < 2)
+            {
+                MessageBox.Show("Добавьте хотя бы 2 слова для создания кроссворда!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
+            // 2. Создаем wordList на основе слов, которые ввел пользователь
+            var wordList = new List<WordItem>(userDictionary);
+
+            // --- ВОТ ЭТИХ СТРОК НЕ ХВАТАЛО ---
+
+            // 3. Запускаем алгоритм генерации кроссворда, передавая ему наши слова
             _generator.Generate(wordList);
+
+            // 4. Отрисовываем сетку кроссворда на экране (твой готовый метод)
             DrawBoard();
-            ShowClues(); // Новый метод для отображения загадок
+
+            // 5. Выводим список загадок сбоку (твой готовый метод)
+            ShowClues();
         }
 
         private void ShowClues()
@@ -178,6 +199,65 @@ namespace CrosswordGen
 
                 // 3. Говорим системе, что мы сами все нарисовали (чтобы она не перерисовала поверх)
                 e.Handled = true;
+            }
+        }
+
+        private void btnAddWord_Click(object sender, EventArgs e)
+        {
+            // 1. Получаем текст из текстовых полей (убираем лишние пробелы по краям)
+            // Слово сразу делаем ЗАГЛАВНЫМИ буквами, как на твоем скриншоте
+            string word = txtWord.Text.Trim().ToUpper();
+            string clue = txtClue.Text.Trim();
+
+            // 2. Проверяем лимит (не больше 20 слов)
+            if (userDictionary.Count >= 20)
+            {
+                MessageBox.Show("Достигнут максимальный лимит в 20 слов!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 3. Проверяем, что пользователь не оставил поля пустыми
+            if (string.IsNullOrEmpty(word) || string.IsNullOrEmpty(clue))
+            {
+                MessageBox.Show("Пожалуйста, введите и слово, и загадку!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 4. Проверяем, нет ли уже такого слова в словаре (чтобы избежать дубликатов)
+            // ВАЖНО: Если в твоем классе WordItem само слово хранится не в свойстве .Word, 
+            // а, например, в .Text, то замени w.Word на w.Text
+            if (userDictionary.Any(w => w.Word == word))
+            {
+                MessageBox.Show("Такое слово уже добавлено!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 5. САМОЕ ГЛАВНОЕ: Создаем объект ТВОЕГО класса WordItem
+            WordItem newItem = new WordItem(word, clue);
+
+            // 6. Добавляем его в наш внутренний список (словарь)
+            userDictionary.Add(newItem);
+
+            // 7. Добавляем текст в ListBox, чтобы пользователь видел, что он добавил
+            listBoxDictionary.Items.Add($"{word} - {clue}");
+
+            // 8. Обновляем текст на Label со счетчиком слов (если ты его создал)
+            lblWordCount.Text = $"Слов: {userDictionary.Count}/20";
+
+            // 9. Очищаем текстовые поля, чтобы было удобно вводить следующее слово
+            txtWord.Clear();
+            txtClue.Clear();
+            txtWord.Focus(); // Возвращаем мигающий курсор обратно в поле ввода слова
+        }
+
+        private void btnRemoveWord_Click(object sender, EventArgs e)
+        {
+            if (listBoxDictionary.SelectedIndex != -1)
+            {
+                int index = listBoxDictionary.SelectedIndex;
+                userDictionary.RemoveAt(index);
+                listBoxDictionary.Items.RemoveAt(index);
+                UpdateWordCount();
             }
         }
     }
