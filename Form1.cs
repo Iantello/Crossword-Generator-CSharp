@@ -135,7 +135,7 @@ namespace CrosswordGen
                 string direction = item.IsVertical ? "По верт." : "По гориз.";
                 // Формат: "1. (По гориз.) Набор инструкций..."
                 string text = $"{item.Number}. ({direction}) {item.Clue}";
-                lstClues.Items.Add(text);
+                lstClues.Items.Add(new MaterialSkin.MaterialListBoxItem(text));
             }
         }
         private void btnCheck_Click(object sender, EventArgs e)
@@ -239,7 +239,7 @@ namespace CrosswordGen
             userDictionary.Add(newItem);
 
             // 7. Добавляем текст в ListBox, чтобы пользователь видел, что он добавил
-            listBoxDictionary.Items.Add($"{word} - {clue}");
+            listBoxDictionary.Items.Add(new MaterialSkin.MaterialListBoxItem($"{word} - {clue}"));
 
             // 8. Обновляем текст на Label со счетчиком слов (если ты его создал)
             lblWordCount.Text = $"Слов: {userDictionary.Count}/20";
