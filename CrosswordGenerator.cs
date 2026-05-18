@@ -7,7 +7,7 @@ namespace CrosswordGen
     public class CrosswordGenerator
     {
         public char[,] Board;
-        public List<WordItem> PlacedWords = new List<WordItem>(); // Теперь храним объекты
+        public List<WordItem> PlacedWords = new List<WordItem>();
         private int _width;
         private int _height;
         private Random _rand = new Random();
@@ -21,13 +21,11 @@ namespace CrosswordGen
 
         public void Generate(List<WordItem> words)
         {
-            // Очистка
             for (int x = 0; x < _width; x++)
                 for (int y = 0; y < _height; y++)
                     Board[x, y] = ' ';
             PlacedWords.Clear();
 
-            // Сортируем: сначала длинные слова
             var sortedWords = words.OrderByDescending(w => w.Word.Length).ToList();
 
             foreach (var item in sortedWords)
@@ -38,14 +36,11 @@ namespace CrosswordGen
                     PlaceNextWord(item);
             }
 
-            // ВАЖНО: После генерации расставляем номера (1, 2, 3...)
-            // Сортируем слова по положению (сверху-вниз, слева-направо), чтобы нумерация была красивой
             PlacedWords = PlacedWords.OrderBy(w => w.Y).ThenBy(w => w.X).ToList();
 
             int currentNumber = 1;
             foreach (var word in PlacedWords)
             {
-                // Если в этой клетке уже начинается другое слово (пересечение начал), используем тот же номер
                 var existing = PlacedWords.FirstOrDefault(w => w != word && w.X == word.X && w.Y == word.Y && w.Number > 0);
                 if (existing != null)
                 {
@@ -57,8 +52,6 @@ namespace CrosswordGen
                 }
             }
         }
-
-        // --- Методы размещения (почти такие же, но работают с WordItem) ---
 
         private void PlaceFirstWord(WordItem item)
         {
@@ -86,14 +79,8 @@ namespace CrosswordGen
             }
         }
 
-        // Метод CanPlaceWord оставляем без изменений (как в прошлом ответе)
         private bool CanPlaceWord(string word, int x, int y, int direction)
         {
-            // ... (Вставьте сюда код CanPlaceWord из прошлого ответа) ...
-            // Для экономии места я его не дублирую, он не меняется.
-            // Только убедитесь, что он у вас есть!
-
-            // --- КОПИЯ ИЗ ПРОШЛОГО ОТВЕТА ДЛЯ УДОБСТВА ---
             if (direction == 0 && (x + word.Length > _width)) return false;
             if (direction == 1 && (y + word.Length > _height)) return false;
 
@@ -117,14 +104,13 @@ namespace CrosswordGen
                         if (cx < _width - 1 && Board[cx + 1, cy] != ' ') return false;
                     }
                 }
-                else if (currentCell == word[i]) // Внимание: здесь item.Word[i] или word[i]
+                else if (currentCell == word[i])
                 {
                     hasIntersection = true;
                 }
                 else return false;
             }
 
-            // Проверка краев
             int beforeX = x - (direction == 0 ? 1 : 0);
             int beforeY = y - (direction == 1 ? 1 : 0);
             if (beforeX >= 0 && beforeY >= 0 && Board[beforeX, beforeY] != ' ') return false;
@@ -133,7 +119,6 @@ namespace CrosswordGen
             if (afterX < _width && afterY < _height && Board[afterX, afterY] != ' ') return false;
 
             return hasIntersection;
-            // -----------------------------------------------
         }
 
         private void PlaceWordOnBoard(WordItem item, int x, int y, int direction)
@@ -145,7 +130,6 @@ namespace CrosswordGen
                 Board[cx, cy] = item.Word[i];
             }
 
-            // Сохраняем данные о размещении
             item.X = x;
             item.Y = y;
             item.IsVertical = (direction == 1);
@@ -154,13 +138,12 @@ namespace CrosswordGen
         public class WordItem
         {
             public string Word { get; set; }
-            public string Clue { get; set; } // Загадка
+            public string Clue { get; set; }
 
-            // Данные о расположении (заполняются генератором)
             public int X { get; set; }
             public int Y { get; set; }
             public bool IsVertical { get; set; }
-            public int Number { get; set; } // Номер вопроса (1, 2, 3...)
+            public int Number { get; set; }
 
             public WordItem(string word, string clue)
             {
