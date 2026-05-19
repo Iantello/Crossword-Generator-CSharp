@@ -186,7 +186,7 @@
             this.btnRemoveWord.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnRemoveWord.UseAccentColor = false;
             this.btnRemoveWord.UseVisualStyleBackColor = true;
-            this.btnRemoveWord.Click += new System.EventHandler(this.btnAddWord_Click);
+            this.btnRemoveWord.Click += new System.EventHandler(this.btnRemoveWord_Click);
             // 
             // btnGenerate
             // 
