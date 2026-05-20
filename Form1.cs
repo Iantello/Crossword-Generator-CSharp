@@ -106,7 +106,7 @@ namespace CrosswordGen
 
         private void ShowClues()
         {
-            lstClues.Items.Clear();
+            lstClues.Clear();
 
             var sortedList = _generator.PlacedWords.OrderBy(w => w.Number).ToList();
 
@@ -114,7 +114,7 @@ namespace CrosswordGen
             {
                 string direction = item.IsVertical ? "По верт." : "По гориз.";
                 string text = $"{item.Number}. ({direction}) {item.Clue}";
-                lstClues.Items.Add(new MaterialSkin.MaterialListBoxItem(text));
+                lstClues.AppendText(text + Environment.NewLine + Environment.NewLine);
             }
         }
         private void btnCheck_Click(object sender, EventArgs e)

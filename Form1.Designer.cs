@@ -31,7 +31,6 @@
             this.gridCrossword = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.lblWordCount = new System.Windows.Forms.Label();
-            this.lstClues = new MaterialSkin.Controls.MaterialListBox();
             this.txtWord = new MaterialSkin.Controls.MaterialTextBox2();
             this.txtClue = new MaterialSkin.Controls.MaterialTextBox2();
             this.btnAddWord = new MaterialSkin.Controls.MaterialButton();
@@ -39,6 +38,7 @@
             this.btnGenerate = new MaterialSkin.Controls.MaterialButton();
             this.btnCheck = new MaterialSkin.Controls.MaterialButton();
             this.listBoxDictionary = new MaterialSkin.Controls.MaterialListBox();
+            this.lstClues = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.gridCrossword)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,20 +73,6 @@
             this.lblWordCount.Size = new System.Drawing.Size(35, 13);
             this.lblWordCount.TabIndex = 10;
             this.lblWordCount.Text = "label2";
-            // 
-            // lstClues
-            // 
-            this.lstClues.BackColor = System.Drawing.Color.White;
-            this.lstClues.BorderColor = System.Drawing.Color.LightGray;
-            this.lstClues.Depth = 0;
-            this.lstClues.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lstClues.Location = new System.Drawing.Point(702, 35);
-            this.lstClues.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lstClues.Name = "lstClues";
-            this.lstClues.SelectedIndex = -1;
-            this.lstClues.SelectedItem = null;
-            this.lstClues.Size = new System.Drawing.Size(290, 357);
-            this.lstClues.TabIndex = 11;
             // 
             // txtWord
             // 
@@ -242,11 +228,21 @@
             this.listBoxDictionary.Size = new System.Drawing.Size(295, 241);
             this.listBoxDictionary.TabIndex = 18;
             // 
+            // lstClues
+            // 
+            this.lstClues.Location = new System.Drawing.Point(702, 35);
+            this.lstClues.Multiline = true;
+            this.lstClues.Name = "lstClues";
+            this.lstClues.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.lstClues.Size = new System.Drawing.Size(290, 357);
+            this.lstClues.TabIndex = 19;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 842);
+            this.Controls.Add(this.lstClues);
             this.Controls.Add(this.listBoxDictionary);
             this.Controls.Add(this.btnCheck);
             this.Controls.Add(this.btnGenerate);
@@ -254,7 +250,6 @@
             this.Controls.Add(this.btnAddWord);
             this.Controls.Add(this.txtClue);
             this.Controls.Add(this.txtWord);
-            this.Controls.Add(this.lstClues);
             this.Controls.Add(this.lblWordCount);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.gridCrossword);
@@ -271,7 +266,6 @@
         private System.Windows.Forms.DataGridView gridCrossword;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblWordCount;
-        private MaterialSkin.Controls.MaterialListBox lstClues;
         private MaterialSkin.Controls.MaterialTextBox2 txtWord;
         private MaterialSkin.Controls.MaterialTextBox2 txtClue;
         private MaterialSkin.Controls.MaterialButton btnAddWord;
@@ -279,6 +273,7 @@
         private MaterialSkin.Controls.MaterialButton btnGenerate;
         private MaterialSkin.Controls.MaterialButton btnCheck;
         private MaterialSkin.Controls.MaterialListBox listBoxDictionary;
+        private System.Windows.Forms.TextBox lstClues;
     }
 }
 
