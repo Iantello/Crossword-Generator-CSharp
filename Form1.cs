@@ -102,6 +102,8 @@ namespace CrosswordGen
             DrawBoard();
 
             ShowClues();
+
+            gridCrossword.ClearSelection();
         }
 
         private void ShowClues()
@@ -119,6 +121,8 @@ namespace CrosswordGen
         }
         private void btnCheck_Click(object sender, EventArgs e)
         {
+            gridCrossword.EndEdit();
+
             for (int x = 0; x < GridSize; x++)
             {
                 for (int y = 0; y < GridSize; y++)
@@ -138,10 +142,12 @@ namespace CrosswordGen
                         else if (userAnswer == correctAnswer)
                         {
                             cell.Style.BackColor = Color.LightGreen;
+                            cell.Style.SelectionBackColor = Color.LightGreen;
                         }
                         else
                         {
                             cell.Style.BackColor = Color.LightPink;
+                            cell.Style.SelectionBackColor = Color.LightPink;
                         }
                     }
                 }
